@@ -2,7 +2,7 @@
   <div>
     <van-sticky>
       <!-- 标题栏 -->
-      <van-nav-bar title="百慕大影城">
+      <van-nav-bar title="仙贝影院">
         <template #right>
           <van-popover v-model:show="showPopover" :actions="actions" placement="bottom-end">
             <template #reference>
@@ -34,13 +34,10 @@
     </van-sticky>
 
     <!-- 电影列表 -->
-    <movie-item 
-      v-for="item in movies" 
-      :key="item.id"
-      :movie="item"></movie-item>
+    <movie-item v-for="item in movies" :key="item.id" :movie="item"></movie-item>
     <div style="height: 50px;"></div>
 
-  </div>
+</div>
 </template>
 
 <script setup lang="ts">
@@ -50,16 +47,16 @@ import Movie from '@/types/Movie'
 
 // 处理页面挂载完毕后，自动加载热映类别下的首页电影列表数据
 const movies = reactive<Movie[]>([])
-onMounted(()=>{
+onMounted(() => {
   console.log('onMounted...1')
   // 发送请求，加载数据  
-  let params = {cid:1, page:1, pagesize:20}
-  httpApi.movieApi.queryByCategoryId(params).then(res=>{
+  let params = { cid: 1, page: 1, pagesize: 20 }
+  httpApi.movieApi.queryByCategoryId(params).then(res => {
     movies.push(...res.data.data.result)
     console.log('加载首页热映列表', movies)
   })
 })
-onMounted(()=>{
+onMounted(() => {
   console.log('onMounted...2')  // 可以重复调用
 })
 

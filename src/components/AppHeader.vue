@@ -1,10 +1,10 @@
 <template>
   <div class="header">
     <img src="@/assets/logo.svg">
-    <p class="title">百慕大</p>
+    <p class="title">仙贝</p>
     <p class="info">发现最新最热电影</p>
     <p class="link">打开App</p>
-  </div>
+</div>
 </template>
 
 <script setup lang="ts">
@@ -22,15 +22,18 @@
   border-bottom: 1px solid #eee;
   background-color: #fff;
 }
+
 .header img {
-  width:40px; 
-  height:40px;
+  width: 40px;
+  height: 40px;
 }
+
 .header p {
   line-height: 40px;
   height: 40px;
 }
-.header .title{
+
+.header .title {
   flex: 1;
   text-align: left;
   margin-left: 5px;
@@ -50,5 +53,4 @@
   font-weight: bold;
   font-size: 1.1em;
   color: #b37e93;
-}
-</style>
+}</style>
