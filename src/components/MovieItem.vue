@@ -1,26 +1,22 @@
-<!-- 主要区域开始 -->
-<div class="main-container">
-
+<template><!-- 主要区域开始 -->
+  <div class="main-container">
     <!-- 单一影片开始 -->
- 
     <div class="movie-item">
-
       <!-- 图片开始 -->
-
       <div class="movie-item-avatar">
         <img :src="movie.cover">
       </div>
       <!-- 图片结束 -->
       <!-- 内容容器开始 -->
-<div class="movie-item-content-wrapper">
+      <div class="movie-item-content-wrapper">
         <div class="content">
-          <div class="title">{{ movie.title}}</div>
-<div class="line-ellipsis">{{movie.type}}</div>
-<div class="line-ellipsis">{{movie.star_actor}}</div>
+          <div class="title">{{ movie.title }}</div>
+          <div class="line-ellipsis">{{ movie.type }}</div>
+          <div class="line-ellipsis">主演: {{ movie.star_actor }}</div>
         </div>
         <!-- 评分开始 -->
-<div class="score-wrapper">
-          <div class="score">{{movie.score}}分</div>
+        <div class="score-wrapper">
+          <div class="score">{{ movie.score }}分</div>
           <!-- <div>暂无评分</div> -->
         </div>
         <!-- 评分结束 -->
@@ -36,7 +32,6 @@ import Movie from '@/types/Movie';
 
 // 使用泛型的方式来定义当前组件所可以接收的属性及类型
 const props = defineProps<{ movie: Movie }>()
-
 </script>
 
 <style scoped>
@@ -122,5 +117,4 @@ const props = defineProps<{ movie: Movie }>()
   white-space: nowrap;
   font-size: 14px;
   cursor: pointer;
-}
-</style>
+}</style>
