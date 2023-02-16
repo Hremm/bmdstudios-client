@@ -1,4 +1,4 @@
-# bmdstudios-client
+# bmdstudios-mobile-client
 
 ## Project setup
 ```

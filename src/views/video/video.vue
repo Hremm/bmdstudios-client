@@ -1,13 +1,14 @@
 <template>
-    <div>
+  <div>
+    <van-empty>视频，敬请期待</van-empty>
 
-</div>
+  </div>
 </template>
 
 <script setup lang="ts">
 
-
-
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>

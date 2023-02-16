@@ -1,8 +1,10 @@
-<template><router-view /></template>
+<template>
+  <router-view />
+</template>
 
 <style lang="scss">
 * {
-  padding: 0;
   margin: 0;
+  padding: 0;
 }
 </style>
