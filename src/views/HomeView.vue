@@ -1,25 +1,48 @@
 <template>
   <div>
-    <van-tabbar v-model="active">
-      <van-tabbar-item icon="home-o">标签</van-tabbar-item>
-      <van-tabbar-item icon="search">标签</van-tabbar-item>
-      <van-tabbar-item icon="friends-o">标签</van-tabbar-item>
-      <van-tabbar-item icon="setting-o">标签</van-tabbar-item>
+    <van-tabbar v-model="active" @change="tabChange">
+      <van-tabbar-item name="/home/index">
+        <span>电影</span>
+        <template #icon="props">
+          <img :src="require(`@/assets/tabs/index_${props.active ? 1 : 0}.png`)">
+        </template>
+      </van-tabbar-item>
+      <van-tabbar-item name="/home/show">
+        <span>视频</span>
+        <template #icon="props">
+          <img v-show="!props.active" src="@/assets/tabs/show_0.png">
+          <img v-show="props.active" src="@/assets/tabs/show_1.png">
+        </template>
+      </van-tabbar-item>
+      <van-tabbar-item name="/home/video">
+        <span>演出</span>
+        <template #icon="props">
+          <img v-show="!props.active" src="@/assets/tabs/video_0.png">
+          <img v-show="props.active" src="@/assets/tabs/video_1.png">
+        </template>
+      </van-tabbar-item>
+      <van-tabbar-item name="/home/me">
+        <span>我的</span>
+        <template #icon="props">
+          <img v-show="!props.active" src="@/assets/tabs/me_0.png">
+          <img v-show="props.active" src="@/assets/tabs/me_1.png">
+        </template>
+      </van-tabbar-item>
     </van-tabbar>
-    <van-button type="primary">主要按钮</van-button>
-    <van-button type="success">成功按钮</van-button>
-    <van-button type="default">默认按钮</van-button>
-    <van-button type="warning">警告按钮</van-button>
-    <van-button type="danger">危险按钮</van-button>
 
-  </div>
+</div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+const router = useRouter()
 
 
-const active = ref(0);
+const active = ref('/home/index');
+const tabChange = function (index: string) {
+  router.push(index)
+}
 
 
 </script>

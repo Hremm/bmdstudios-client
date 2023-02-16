@@ -3,35 +3,34 @@ import HomeView from '../views/HomeView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/',
+    path: '/home',
     name: 'home',
-    component: HomeView
+    component: HomeView,
+    children: [
+      {
+        path: 'index',
+        component: () => import('../views/index/Index.vue')
+      },
+      {
+        path: 'video',
+        component: () => import('../views/video/Video.vue')
+      },
+      {
+        path: 'show',
+        component: () => import('../views/show/Show.vue')
+      },
+      {
+        path: 'me',
+        component: () => import('../views/me/Me.vue')
+      },
+    ]
   },
   {
     path: '/about',
     name: 'about',
     component: () => import('../views/AboutView.vue')
   },
-  {
-    path: '/index/',
-    name: 'about',
-    component: () => import('../views/AboutView.vue')
-  },
-  {
-    path: '/about',
-    name: 'about',
-    component: () => import('../views/AboutView.vue')
-  },
-  {
-    path: '/about',
-    name: 'about',
-    component: () => import('../views/AboutView.vue')
-  },
-  {
-    path: '/about',
-    name: 'about',
-    component: () => import('../views/AboutView.vue')
-  }
+
 ]
 
 const router = createRouter({
