@@ -34,14 +34,22 @@
     </van-sticky>
 
     <!-- 电影列表 -->
-    <movie-item v-for="item in movies" :key="item.id" :movie="item"></movie-item>
+    <van-pull-refresh v-model="refreshing" success-text="刷新成功" @refresh="onPullRefresh">
+      <van-list v-if="movies && movies.length > 0" v-model:loading="loading" :finished="finished" finished-text="暂无更多数据"
+        @load="onLoad">
+        <movie-item v-for="item in movies" :key="item.id" :movie="item">
+        </movie-item>
+
+      </van-list>
+      <van-empty v-else>暂无数据</van-empty>
+    </van-pull-refresh>
     <div style="height: 50px;"></div>
 
-</div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, reactive } from 'vue'
+import { ref, onMounted, reactive, watch } from 'vue'
 import httpApi from '@/http'
 import Movie from '@/types/Movie'
 
@@ -67,8 +75,67 @@ const showPopover = ref(false)
 const actions = ref([{ text: '首页' }, { text: '热点' }, { text: '新闻' }])
 
 
-// 顶部导航栏相关
+// 顶部导航栏切换相关
 const navActive = ref('1')
+watch(navActive, (newVal, oldval) => {
+  console.log(newVal, oldval)//newVal就是cid类别的id
+  //切换时回到顶部,且让其仍能加载更多
+  window.scrollTo(0, 0)
+  finished.value = false
+  //去缓存中寻找数据,若存在就不再发送请求
+  let str = localStorage.getItem(newVal)
+  if (str != null) {
+    let data: Movie[] = JSON.parse(str)
+    movies.splice(0, movies.length, ...data)
+    return;
+  }
+
+  //发送请求
+  let params = { cid: parseInt(newVal), page: 1, pagesize: 20 }
+  httpApi.movieApi.queryByCategoryId(params).then(res => {
+    console.log('加载首页相关列表', res)
+    movies.splice(0, movies.length, ...res.data.data.result)
+    // 处理客户端缓存，将下载的数据存到LocalStorage中
+    let value = JSON.stringify(res.data.data.result)
+    localStorage.setItem(newVal, value)
+  })
+
+
+})
+//触底加载
+const loading = ref(false)
+const finished = ref(false)
+const onLoad = function () {
+  console.log('onLoad...')
+  let cid = parseInt(navActive.value)
+  let page = Math.floor(movies.length / 20) + 1
+  let params = { cid, page, pagesize: 20 }
+  httpApi.movieApi.queryByCategoryId(params).then(res => {
+    console.log(`加载到了第${page}页的数据`, res)
+    movies.push(...res.data.data.result)
+    loading.value = false
+    //判断是否加载完毕,否则将一直加载
+    if (movies.length == res.data.data.total) {
+      finished.value = true
+    }
+  })
+}
+
+//下拉刷新
+const refreshing = ref(false);
+const onPullRefresh = function () {
+  console.log('下拉刷新')
+  let params = { cid: parseInt(navActive.value), page: 1, pagesize: 20 }
+  httpApi.movieApi.queryByCategoryId(params).then(res => {
+    movies.splice(0, movies.length, ...res.data.data.result)
+    finished.value = false
+    refreshing.value = false
+    //更新缓存
+    localStorage.setItem(
+      navActive.value, JSON.stringify(res.data.data.result)
+    )
+  })
+}
 
 </script>
 
