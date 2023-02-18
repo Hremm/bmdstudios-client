@@ -37,7 +37,7 @@
     <van-pull-refresh v-model="refreshing" success-text="刷新成功" @refresh="onPullRefresh">
       <van-list v-if="movies && movies.length > 0" v-model:loading="loading" :finished="finished" finished-text="暂无更多数据"
         @load="onLoad">
-        <movie-item v-for="item in movies" :key="item.id" :movie="item">
+        <movie-item v-for="item in movies" :key="item.id" :movie="item" @click="router.push(`/detail/${item.id}`)">
         </movie-item>
 
       </van-list>
@@ -52,6 +52,11 @@
 import { ref, onMounted, reactive, watch } from 'vue'
 import httpApi from '@/http'
 import Movie from '@/types/Movie'
+import { useRouter } from 'vue-router';
+//获取路由管理器
+const router = useRouter()
+
+
 
 // 处理页面挂载完毕后，自动加载热映类别下的首页电影列表数据
 const movies = reactive<Movie[]>([])
