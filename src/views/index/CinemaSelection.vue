@@ -1,35 +1,33 @@
 <template>
   <div class="container">
     <!-- 顶部导航栏 -->
-    <van-nav-bar title="疯狂动物城" left-arrow></van-nav-bar>
+    <van-nav-bar title="" left-arrow></van-nav-bar>
 
     <!-- 广告 -->
     <app-header></app-header>
 
     <!-- 电影详细描述 -->
-    <movie-desc></movie-desc>
+    <movie-desc v-if="movie" :movie="movie"></movie-desc>
 
     <!-- 顶部时间导航条 -->
     <van-sticky>
       <van-tabs v-model:active="activeDate" swipe-threshold="1" line-width="80px">
-        <van-tab v-for="item in dateAry" name=""
+        <van-tab v-for="item in dateAry" name="item.format('YYYY-MM-DD')"
           :title="item.format(`周${Week[parseInt(item.format('e'))]} MM月DD日`)"></van-tab>
       </van-tabs>
     </van-sticky>
 
     <!-- 电影院列表项 -->
-    <div class="item mb-line-b" v-for="item in 10" @click.native="$router.push('/plan-selection')">
+    <van-empty v-if="cinemas.length == 0">暂无数据</van-empty>
+    <div class="item mb-line-b" v-for="item in cinemas" @click.native="$router.push('/plan-selection')">
       <div class="title-block">
-        <div class="title line-ellipsis">娜美国际影城</div>
+        <div class="title line-ellipsis">{{ item.cinema_name }}</div>
         <div class="location-block">
-          <div class="flex line-ellipsis">通州区六和桥西甲壹号（免费停车）</div>
-          <div class="distance">8.6 km</div>
+          <div class="flex line-ellipsis">{{ item.address }}</div>
+          <!-- <div class="distance">8.6 km</div> -->
         </div>
         <div class="label-block">
-          <p class="vipTag">改签</p>
-          <p class="vipTag">小吃</p>
-          <p class="vipTag">折扣卡</p>
-          <p class="vipTag">退</p>
+          <p class="vipTag" v-for="tag in item.tags.split('/')">{{ tag }}</p>
         </div>
       </div>
     </div>
@@ -38,12 +36,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, watch, onMounted } from 'vue'
 import moment from 'moment'
 import MovieDetail from './MovieDetail.vue';
 import httpApi from '@/http';
-
-
+import { useRoute } from 'vue-router';
+import Cinema from '@/types/cinema';
+import Movie from '@/types/Movie';
+const route = useRoute()
+const cinemas = reactive<Cinema[]>([])
 
 
 
@@ -54,12 +55,26 @@ for (let i = 0; i <= 7; i++) {
   dateAry.push(moment().add(i, 'days'))
 }
 console.log(dateAry)
+
 //时间标签组
-const activeDate = ref('2022-10-06')
+const activeDate = ref('2023-02-20')
 watch(activeDate, (newval, oldval) => {
-  console.log(newval)
-  let params = { movie_id: MovieDetail, showingon_date: newval }
-  httpApi.cinemaApi.queryByMovie
+  // console.log(newval)
+  let params = { movie_id: parseInt(movieId), showingon_date: newval }
+  httpApi.cinemaApi.queryByMovieIdAndDate(params).then(res => {
+    console.log('查到的电影列表如下', res)
+    cinemas.splice(0, cinemas.length, ...res.data.data)
+  })
+})
+
+// mounted 加载电影详情数据
+const movieId = route.params.id as string
+const movie = ref<Movie>()
+onMounted(() => {
+  httpApi.movieApi.queryById({ id: movieId }).then(res => {
+    console.log('加载电影详情：', res)
+    movie.value = res.data.data
+  })
 })
 
 </script>

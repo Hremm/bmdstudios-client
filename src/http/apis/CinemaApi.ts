@@ -52,8 +52,9 @@ const cinemaApi = {
   update(params: object) {
     return myaxios.post(BMDURL + "/cinema/update", params);
   },
-  queryByMovieIdAndDate(param: { movie_id: number, showingon_date: string }) {
-    return myaxios.get(BMDURL + "")
+  //通过电影id与播放日期,查询当天有该电影排期的电影院
+  queryByMovieIdAndDate(params: { movie_id: number, showingon_date: string }) {
+    return myaxios.get(BMDURL + "/cinemas/date", params)
   }
 
 };
