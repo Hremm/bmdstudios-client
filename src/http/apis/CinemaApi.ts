@@ -1,7 +1,7 @@
 import myaxios from "../MyAxios";
 // 引入路径前缀
-import BASEURL from '../BaseUrl' 
-const {BMDURL} = BASEURL
+import BASEURL from '../BaseUrl'
+const { BMDURL } = BASEURL
 
 const cinemaApi = {
 
@@ -10,7 +10,7 @@ const cinemaApi = {
    * 删除电影院接口
    * @param {Object} params {id:4}
    */
-  delete(params:object){
+  delete(params: object) {
     return myaxios.post(BMDURL + "/cinema/del", params)
   },
 
@@ -18,14 +18,14 @@ const cinemaApi = {
    * 添加电影院接口
    * @param {Object} params 详见接口文档
    */
-  add(params:object) {
+  add(params: object) {
     return myaxios.post(BMDURL + "/cinema/add", params);
   },
 
   /**
    * 查询所有电影院
    */
-  list(){
+  list() {
     return myaxios.get(BMDURL + "/cinemas")
   },
 
@@ -41,7 +41,7 @@ const cinemaApi = {
    * @param:
    *   params: 存放影院ID的对象  {id:2}
    */
-  queryById(params:object) {
+  queryById(params: object) {
     return myaxios.get(BMDURL + "/cinema/query", params);
   },
 
@@ -49,9 +49,12 @@ const cinemaApi = {
    * 通过id修改影院信息
    * @param {Object} params 详情参考接口文档
    */
-  update(params:object){
+  update(params: object) {
     return myaxios.post(BMDURL + "/cinema/update", params);
   },
+  queryByMovieIdAndDate(param: { movie_id: number, showingon_date: string }) {
+    return myaxios.get(BMDURL + "")
+  }
 
 };
 

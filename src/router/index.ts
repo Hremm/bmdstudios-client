@@ -11,7 +11,10 @@ const routes: Array<RouteRecordRaw> = [
     component: HomeView,
     children: [{
       path: 'index',
-      component: () => import('../views/index/Index.vue')
+      component: () => import('../views/index/Index.vue'),
+      meta: {
+        keepAlive: true
+      },
     }, {
       path: 'video',
       component: () => import('../views/video/Video.vue')
@@ -22,6 +25,7 @@ const routes: Array<RouteRecordRaw> = [
       path: 'me',
       component: () => import('../views/me/Me.vue')
     },
+
 
     ]
   },
@@ -34,6 +38,10 @@ const routes: Array<RouteRecordRaw> = [
     path: '/detail/:id',
     component: () => import('../views/index/MovieDetail.vue')
   },
+  {
+    path: '/cinema-selection/:id',
+    component: () => import('../views/index/CinemaSelection.vue')
+  }
 ]
 
 const router = createRouter({

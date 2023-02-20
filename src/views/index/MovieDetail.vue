@@ -57,8 +57,9 @@
       <div class="title">视频和剧照</div>
       <div class="photos-list">
         <!-- 遍历剧照列表 -->
-        <div class="photos-item" v-for="item in thumbs">
-          <van-image style="width: 100%; height: 100%;" :src="item" fit="cover"></van-image>
+        <div class="photos-item" v-for="(item, i) in thumbs">
+          <van-image @click.native="previewImage(i)" style="width: 100%; height: 100%;" :src="item"
+            fit="cover"></van-image>
         </div>
       </div>
     </div>
@@ -67,13 +68,15 @@
     <div style="height: 50px"></div>
     <!-- 提示若热映类别则显示购票，若待映类别则显示暂未上映，若经典类别则什么都不显示 -->
     <div class="buyblock">
-      <van-button round type="danger" block @click="$router.push('/cinema-selection')">特惠购票</van-button>
+      <van-button round type="danger" block @click="$router.push('/cinema-selection/' + id)">特惠购票</van-button>
       <!-- <van-button round type="danger" disabled block>暂未上映</van-button> -->
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { showImagePreview } from 'vant';
+import 'vant/es/image-preview/style'
 import httpApi from '@/http';
 import Actor from '@/types/Actor';
 import Movie from '@/types/Movie';
@@ -85,6 +88,10 @@ import { useRoute } from 'vue-router';
 const route = useRoute()//当前路由对象
 const id = route.params.id
 const movie = ref<Movie>({})//查询到的电影
+//演员列表
+const actors = ref<Actor[]>([])
+//剧照
+const thumbs = ref<string[]>([])
 onMounted(() => {
   httpApi.movieApi.queryById({ id }).then(res => {
     console.log('当前这部电影的详细信息', res)
@@ -96,10 +103,17 @@ onMounted(() => {
 
 //控制简介的展开和收起
 const isClose = ref(true)
-//演员列表
-const actors = ref<Actor[]>([])
-//剧照
-const thumbs = ref<string[]>([])
+
+//剧照图片放大预览
+const previewImage = function (index: number) {
+  let urls: string[] = []
+  thumbs.value.forEach(item => {
+    let url = item.split('@')[0]
+    urls.push(url)
+  })
+  showImagePreview({ images: urls, startPosition: index })
+}
+
 
 </script>
 
